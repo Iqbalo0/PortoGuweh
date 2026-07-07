@@ -39,8 +39,8 @@ body {
 /* Scroll Height Generator (Enables native scrolling in background) */
 #scroll-height-generator {
     width: 1px;
-    height: 400vh;
-    /* 4 sections of 100vh */
+    height: 300vh;
+    /* 4 sections, faster transitions */
     pointer-events: none;
     z-index: 0;
 }

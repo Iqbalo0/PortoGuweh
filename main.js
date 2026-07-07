@@ -332,7 +332,7 @@ class App {
                 trigger: '#scroll-height-generator',
                 start: 'top top',
                 end: 'bottom bottom',
-                scrub: this.isMobile ? 1 : 1.5
+                scrub: this.isMobile ? 0.5 : 0.8
             }
         });
 
@@ -394,7 +394,9 @@ class App {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const targetIdx = parseInt(link.getAttribute('data-section'));
-                const scrollPos = targetIdx * window.innerHeight;
+                // 300vh total, 3 transitions → each section = 1/3 of total scroll
+                const totalScroll = document.getElementById('scroll-height-generator').offsetHeight - window.innerHeight;
+                const scrollPos = (targetIdx / 3) * totalScroll;
                 window.scrollTo({
                     top: scrollPos,
                     behavior: 'smooth'
@@ -406,7 +408,8 @@ class App {
         document.querySelectorAll('button[data-section]').forEach(btn => {
             btn.addEventListener('click', () => {
                 const targetIdx = parseInt(btn.getAttribute('data-section'));
-                const scrollPos = targetIdx * window.innerHeight;
+                const totalScroll = document.getElementById('scroll-height-generator').offsetHeight - window.innerHeight;
+                const scrollPos = (targetIdx / 3) * totalScroll;
                 window.scrollTo({
                     top: scrollPos,
                     behavior: 'smooth'
