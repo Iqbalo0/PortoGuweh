@@ -539,7 +539,7 @@ class App {
 
         navLinks.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', () => {
-                if (this.isMobile && navLinks.classList.contains('open')) {
+                if (navLinks.classList.contains('open')) {
                     this.closeNav(hamburger, navLinks);
                 }
             });
@@ -583,13 +583,13 @@ class App {
 
         // Set initial visibility
         gsap.set('#sec-hero', { autoAlpha: 1, y: 0, pointerEvents: 'auto' });
-        gsap.set(['#sec-about', '#sec-projects', '#sec-contact'], { autoAlpha: 0, y: 30, pointerEvents: 'none' });
+        gsap.set(['#sec-about', '#sec-cv', '#sec-projects', '#sec-contact'], { autoAlpha: 0, y: 30, pointerEvents: 'none' });
 
         const moonRadius = this.isMobile ? 12 : 18;
         // Starting Y: moon mostly hidden below (only top curve peeks up)
         const startY = -(moonRadius + (this.isMobile ? 6 : 8));
-        // End Y: moon has risen up significantly so most of it is visible
-        const endY = -(moonRadius - (this.isMobile ? 6 : 10));
+        // End Y: moon rises but not all the way to full moon
+        const endY = -(moonRadius + (this.isMobile ? 3 : 5.5));
 
         // Scroll Timeline
         this.scrollTimeline = gsap.timeline({
@@ -609,26 +609,37 @@ class App {
             .to('#sec-about', { autoAlpha: 1, y: 0, pointerEvents: 'auto', duration: 1 }, '<')
             .to(this.meshGroup.position, { 
                 x: this.isMobile ? 0.5 : 1.5, 
-                y: startY + (endY - startY) * 0.35,
+                y: startY + (endY - startY) * 0.33,
                 z: 0,
                 duration: 1 
             }, '<')
             .to(this.meshGroup.rotation, { y: 0.15, duration: 1 }, '<')
 
-            // --- Phase 2: About to Projects ---
-            // Moon continues rising, shifts to the left
+            // --- Phase 2: About to CV ---
             .to('#sec-about', { autoAlpha: 0, y: -40, pointerEvents: 'none', duration: 1 })
+            .to('#sec-cv', { autoAlpha: 1, y: 0, pointerEvents: 'auto', duration: 1 }, '<')
+            .to(this.meshGroup.position, { 
+                x: this.isMobile ? 0 : 0, 
+                y: startY + (endY - startY) * 0.66,
+                z: 0,
+                duration: 1 
+            }, '<')
+            .to(this.meshGroup.rotation, { y: 0.25, duration: 1 }, '<')
+
+            // --- Phase 3: CV to Projects ---
+            // Moon continues rising, shifts to the left
+            .to('#sec-cv', { autoAlpha: 0, y: -40, pointerEvents: 'none', duration: 1 })
             .to('#sec-projects', { autoAlpha: 1, y: 0, pointerEvents: 'auto', duration: 1 }, '<')
             .to(this.meshGroup.position, { 
                 x: this.isMobile ? -0.5 : -2, 
-                y: startY + (endY - startY) * 0.65,
+                y: startY + (endY - startY) * 0.85,
                 z: 0,
                 duration: 1 
             }, '<')
             .to(this.meshGroup.rotation, { y: 0.35, duration: 1 }, '<')
 
-            // --- Phase 3: Projects to Contact ---
-            // Moon fully risen into center view
+            // --- Phase 4: Projects to Contact ---
+            // Moon almost at highest point in view but still huge and bottom-heavy
             .to('#sec-projects', { autoAlpha: 0, y: -40, pointerEvents: 'none', duration: 1 })
             .to('#sec-contact', { autoAlpha: 1, y: 0, pointerEvents: 'auto', duration: 1 }, '<')
             .to(this.meshGroup.position, { 
@@ -654,9 +665,10 @@ class App {
                 const progress = self.progress;
                 let activeIndex = 0;
                 
-                if (progress > 0.8) activeIndex = 3;
-                else if (progress > 0.48) activeIndex = 2;
-                else if (progress > 0.15) activeIndex = 1;
+                if (progress > 0.85) activeIndex = 4;
+                else if (progress > 0.6) activeIndex = 3;
+                else if (progress > 0.35) activeIndex = 2;
+                else if (progress > 0.1) activeIndex = 1;
                 
                 navLinks.forEach((link, idx) => {
                     if (idx === activeIndex) {
@@ -673,7 +685,7 @@ class App {
                 e.preventDefault();
                 const targetIdx = parseInt(link.getAttribute('data-section'));
                 const totalScroll = document.getElementById('scroll-height-generator').offsetHeight - window.innerHeight;
-                const scrollPos = (targetIdx / 3) * totalScroll;
+                const scrollPos = (targetIdx / 4) * totalScroll;
                 window.scrollTo({ top: scrollPos, behavior: 'smooth' });
             });
         });
@@ -682,7 +694,7 @@ class App {
             btn.addEventListener('click', () => {
                 const targetIdx = parseInt(btn.getAttribute('data-section'));
                 const totalScroll = document.getElementById('scroll-height-generator').offsetHeight - window.innerHeight;
-                const scrollPos = (targetIdx / 3) * totalScroll;
+                const scrollPos = (targetIdx / 4) * totalScroll;
                 window.scrollTo({ top: scrollPos, behavior: 'smooth' });
             });
         });
